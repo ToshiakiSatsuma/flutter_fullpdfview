@@ -115,6 +115,7 @@
                 pageSize = CGSizeMake(pageRectInitial.size.width, pageRectInitial.size.height);
                 CGRect parentRectInitial = [[UIScreen mainScreen] bounds];
 
+                
                 if (frame.size.width > 0 && frame.size.height > 0) {
                     parentRectInitial = frame;
                 }else {
@@ -166,17 +167,24 @@
                 }
                 CGFloat scale;
                 scale = 1.0f;
+                
+                CGFloat pageWidth = page.rotation != 90 && page.rotation != 270 ? pageRect.size.width : pageRect.size.height;
+                CGFloat pageHeight = page.rotation != 90 && page.rotation != 270 ? pageRect.size.height : pageRect.size.width;
+                
+                CGFloat parentWidth = parentRect.size.width;
+                CGFloat parentHeight = parentRect.size.height;
+
                 if(!dualPage){
-                    if (parentRect.size.width / parentRect.size.height >= pageRect.size.width / pageRect.size.height) {
-                        scale = parentRect.size.height / pageRect.size.height;
+                    if (parentWidth / parentHeight >= pageWidth / pageHeight) {
+                        scale = parentHeight / pageHeight;
                     } else {
-                        scale = parentRect.size.width / pageRect.size.width;
+                        scale = parentWidth / pageWidth;
                     }
                 }else{
-                    if (parentRect.size.width / parentRect.size.height >= pageRect.size.width*2 / pageRect.size.height) {
-                        scale = parentRect.size.height / pageRect.size.height;
+                    if (parentWidth / parentHeight >= pageWidth*2 / pageHeight) {
+                        scale = parentHeight / pageHeight;
                     } else {
-                        scale = parentRect.size.width / (parentRect.size.width *2 )  ;
+                        scale = parentWidth / (parentWidth *2 )  ;
                     }
                 }
                  _pdfView.scaleFactor = scale;
@@ -263,9 +271,14 @@
 - (void)setZoom:(FlutterMethodCall*)call result:(FlutterResult)result {
     NSDictionary<NSString*, NSNumber*>* arguments = [call arguments];
     NSNumber* newZoom = arguments[@"newzoom"];
-    _pdfView.scaleFactor = newZoom
+    #if CGFLOAT_IS_DOUBLE
+        _pdfView.scaleFactor = [newZoom doubleValue];
+    #else
+        _pdfView.scaleFactor = [newZoom floatValue];
+    #endif
     result(nil);
 }
+
 
 - (void)resetZoom:(FlutterMethodCall*)call result:(FlutterResult)result {
     _pdfView.scaleFactor=_pdfView.scaleFactorForSizeToFit;

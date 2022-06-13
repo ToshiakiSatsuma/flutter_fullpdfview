@@ -286,14 +286,14 @@ class PDFViewController {
     switch (call.method) {
       case 'onRender':
         if (_widget.onRender != null) {
-          _widget.onRender(call.arguments['pages']);
+          _widget.onRender(call.arguments['pages'] as int);
         }
 
         return null;
       case 'onPageChanged':
         if (_widget.onPageChanged != null) {
           _widget.onPageChanged(
-              call.arguments['page'], call.arguments['total']);
+              call.arguments['page'] as int, call.arguments['total'] as int);
         }
 
         return null;
@@ -305,14 +305,14 @@ class PDFViewController {
         return null;
       case 'onPageError':
         if (_widget.onPageError != null) {
-          _widget.onPageError(call.arguments['page'], call.arguments['error']);
+          _widget.onPageError(call.arguments['page'] as int, call.arguments['error']);
         }
 
         return null;
 
       case 'onZoomChanged':
         if (_widget.onZoomChanged != null) {
-          _widget.onZoomChanged(call.arguments['zoom']);
+          _widget.onZoomChanged(call.arguments['zoom'] as double);
         }
         return null;
     }

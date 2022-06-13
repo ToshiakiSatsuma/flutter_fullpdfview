@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
         corruptedPathPDF = f.path;
       });
     });
-    fromAsset('assets/demo.pdf', 'sample.pdf').then((f) {
+    fromAsset('assets/error.pdf', 'sample.pdf').then((f) {
       setState(() {
         pathPDF = f.path;
       });
